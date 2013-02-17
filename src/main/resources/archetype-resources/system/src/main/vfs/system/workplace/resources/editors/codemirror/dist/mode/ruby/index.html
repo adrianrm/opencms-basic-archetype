@@ -1,0 +1,175 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CodeMirror: Ruby mode</title>
+    <link rel="stylesheet" href="../../lib/codemirror.css">
+    <script src="../../lib/codemirror.js"></script>
+    <script src="ruby.js"></script>
+    <style>
+      .CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}
+      .cm-s-default span.cm-arrow { color: red; }
+    </style>
+    <link rel="stylesheet" href="../../doc/docs.css">
+  </head>
+  <body>
+    <h1>CodeMirror: Ruby mode</h1>
+    <form><textarea id="code" name="code">
+${symbol_pound} Code from http://sandbox.mc.edu/~bennet/ruby/code/poly_rb.html
+${symbol_pound}
+${symbol_pound} This program evaluates polynomials.  It first asks for the coefficients
+${symbol_pound} of a polynomial, which must be entered on one line, highest-order first.
+${symbol_pound} It then requests values of x and will compute the value of the poly for
+${symbol_pound} each x.  It will repeatly ask for x values, unless you the user enters
+${symbol_pound} a blank line.  It that case, it will ask for another polynomial.  If the
+${symbol_pound} user types quit for either input, the program immediately exits.
+${symbol_pound}
+
+${symbol_pound}
+${symbol_pound} Function to evaluate a polynomial at x.  The polynomial is given
+${symbol_pound} as a list of coefficients, from the greatest to the least.
+def polyval(x, coef)
+    sum = 0
+    coef = coef.clone           ${symbol_pound} Don't want to destroy the original
+    while true
+        sum += coef.shift       ${symbol_pound} Add and remove the next coef
+        break if coef.empty?    ${symbol_pound} If no more, done entirely.
+        sum *= x                ${symbol_pound} This happens the right number of times.
+    end
+    return sum
+end
+
+${symbol_pound}
+${symbol_pound} Function to read a line containing a list of integers and return
+${symbol_pound} them as an array of integers.  If the string conversion fails, it
+${symbol_pound} throws TypeError.  If the input line is the word 'quit', then it
+${symbol_pound} converts it to an end-of-file exception
+def readints(prompt)
+    ${symbol_pound} Read a line
+    print prompt
+    line = readline.chomp
+    raise EOFError.new if line == 'quit' ${symbol_pound} You can also use a real EOF.
+            
+    ${symbol_pound} Go through each item on the line, converting each one and adding it
+    ${symbol_pound} to retval.
+    retval = [ ]
+    for str in line.split(/${symbol_escape}s+/)
+        if str =~ /^${symbol_escape}-?${symbol_escape}d+${symbol_dollar}/
+            retval.push(str.to_i)
+        else
+            raise TypeError.new
+        end
+    end
+
+    return retval
+end
+
+${symbol_pound}
+${symbol_pound} Take a coeff and an exponent and return the string representation, ignoring
+${symbol_pound} the sign of the coefficient.
+def term_to_str(coef, exp)
+    ret = ""
+
+    ${symbol_pound} Show coeff, unless it's 1 or at the right
+    coef = coef.abs
+    ret = coef.to_s     unless coef == 1 && exp > 0
+    ret += "x" if exp > 0                               ${symbol_pound} x if exponent not 0
+    ret += "^" + exp.to_s if exp > 1                    ${symbol_pound} ^exponent, if > 1.
+
+    return ret
+end
+
+${symbol_pound}
+${symbol_pound} Create a string of the polynomial in sort-of-readable form.
+def polystr(p)
+    ${symbol_pound} Get the exponent of first coefficient, plus 1.
+    exp = p.length
+
+    ${symbol_pound} Assign exponents to each term, making pairs of coeff and exponent,
+    ${symbol_pound} Then get rid of the zero terms.
+    p = (p.map { |c| exp -= 1; [ c, exp ] }).select { |p| p[0] != 0 }
+
+    ${symbol_pound} If there's nothing left, it's a zero
+    return "0" if p.empty?
+
+    ${symbol_pound} *** Now p is a non-empty list of [ coef, exponent ] pairs. ***
+
+    ${symbol_pound} Convert the first term, preceded by a "-" if it's negative.
+    result = (if p[0][0] < 0 then "-" else "" end) + term_to_str(*p[0])
+
+    ${symbol_pound} Convert the rest of the terms, in each case adding the appropriate
+    ${symbol_pound} + or - separating them.  
+    for term in p[1...p.length]
+        ${symbol_pound} Add the separator then the rep. of the term.
+        result += (if term[0] < 0 then " - " else " + " end) + 
+                term_to_str(*term)
+    end
+
+    return result
+end
+        
+${symbol_pound}
+${symbol_pound} Run until some kind of endfile.
+begin
+    ${symbol_pound} Repeat until an exception or quit gets us out.
+    while true
+        ${symbol_pound} Read a poly until it works.  An EOF will except out of the
+        ${symbol_pound} program.
+        print "${symbol_escape}n"
+        begin
+            poly = readints("Enter a polynomial coefficients: ")
+        rescue TypeError
+            print "Try again.${symbol_escape}n"
+            retry
+        end
+        break if poly.empty?
+
+        ${symbol_pound} Read and evaluate x values until the user types a blank line.
+        ${symbol_pound} Again, an EOF will except out of the pgm.
+        while true
+            ${symbol_pound} Request an integer.
+            print "Enter x value or blank line: "
+            x = readline.chomp
+            break if x == ''
+            raise EOFError.new if x == 'quit'
+
+            ${symbol_pound} If it looks bad, let's try again.
+            if x !~ /^${symbol_escape}-?${symbol_escape}d+${symbol_dollar}/
+                print "That doesn't look like an integer.  Please try again.${symbol_escape}n"
+                next
+            end
+
+            ${symbol_pound} Convert to an integer and print the result.
+            x = x.to_i
+            print "p(x) = ", polystr(poly), "${symbol_escape}n"
+            print "p(", x, ") = ", polyval(x, poly), "${symbol_escape}n"
+        end
+    end
+rescue EOFError
+    print "${symbol_escape}n=== EOF ===${symbol_escape}n"
+rescue Interrupt, SignalException
+    print "${symbol_escape}n=== Interrupted ===${symbol_escape}n"
+else
+    print "--- Bye ---${symbol_escape}n"
+end
+</textarea></form>
+    <script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        mode: "text/x-ruby",
+        tabMode: "indent",
+        matchBrackets: true,
+        indentUnit: 4
+      });
+    </script>
+
+    <p><strong>MIME types defined:</strong> <code>text/x-ruby</code>.</p>
+
+    <p>Development of the CodeMirror Ruby mode was kindly sponsored
+    by <a href="http://ubalo.com/">Ubalo</a>, who hold
+    the <a href="LICENSE">license</a>.</p>
+
+  </body>
+</html>

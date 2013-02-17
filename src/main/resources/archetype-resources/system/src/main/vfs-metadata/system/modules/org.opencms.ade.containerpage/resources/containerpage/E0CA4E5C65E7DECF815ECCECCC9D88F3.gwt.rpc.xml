@@ -1,0 +1,21 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+
+<export>
+	<file>
+		<destination>system/modules/org.opencms.ade.containerpage/resources/containerpage/E0CA4E5C65E7DECF815ECCECCC9D88F3.gwt.rpc</destination>
+		<type>plain</type>
+		<uuidstructure>7d267cfc-0236-11e2-a2cb-85425e45fe44</uuidstructure>
+		<uuidresource>7d267cfd-0236-11e2-a2cb-85425e45fe44</uuidresource>
+		<datelastmodified>Wed, 19 Sep 2012 08:46:22 GMT</datelastmodified>
+		<userlastmodified>Admin</userlastmodified>
+		<datecreated>Wed, 19 Sep 2012 08:46:22 GMT</datecreated>
+		<usercreated>Admin</usercreated>
+		<flags>0</flags>
+		<properties/>
+		<relations/>
+		<accesscontrol/>
+	</file>
+</export>

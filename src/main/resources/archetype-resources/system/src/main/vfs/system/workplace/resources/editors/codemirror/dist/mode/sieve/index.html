@@ -1,0 +1,84 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CodeMirror: Sieve (RFC5228) mode</title>
+    <link rel="stylesheet" href="../../doc/docs.css">
+    <link rel="stylesheet" href="../../lib/codemirror.css">
+    <script src="../../lib/codemirror.js"></script>
+    <script src="sieve.js"></script>
+    <style>.CodeMirror {background: ${symbol_pound}f8f8f8;}</style>
+  </head>
+  <body>
+    <h1>CodeMirror: Sieve (RFC5228) mode</h1>
+    <form><textarea id="code" name="code">
+${symbol_pound}
+${symbol_pound} Example Sieve Filter
+${symbol_pound} Declare any optional features or extension used by the script
+${symbol_pound}
+
+require ["fileinto", "reject"];
+
+${symbol_pound}
+${symbol_pound} Reject any large messages (note that the four leading dots get
+${symbol_pound} "stuffed" to three)
+${symbol_pound}
+if size :over 1M
+{
+  reject text:
+Please do not send me large attachments.
+Put your file on a server and send me the URL.
+Thank you.
+.... Fred
+.
+;
+  stop;
+}
+
+${symbol_pound}
+${symbol_pound} Handle messages from known mailing lists
+${symbol_pound} Move messages from IETF filter discussion list to filter folder
+${symbol_pound}
+if header :is "Sender" "owner-ietf-mta-filters@imc.org"
+{
+  fileinto "filter";  ${symbol_pound} move to "filter" folder
+}
+${symbol_pound}
+${symbol_pound} Keep all messages to or from people in my company
+${symbol_pound}
+elsif address :domain :is ["From", "To"] "example.com"
+{
+  keep;               ${symbol_pound} keep in "In" folder
+}
+
+${symbol_pound}
+${symbol_pound} Try and catch unsolicited email.  If a message is not to me,
+${symbol_pound} or it contains a subject known to be spam, file it away.
+${symbol_pound}
+elsif anyof (not address :all :contains
+               ["To", "Cc", "Bcc"] "me@example.com",
+             header :matches "subject"
+               ["*make*money*fast*", "*university*dipl*mas*"])
+{
+  ${symbol_pound} If message header does not contain my address,
+  ${symbol_pound} it's from a list.
+  fileinto "spam";   ${symbol_pound} move to "spam" folder
+}
+else
+{
+  ${symbol_pound} Move all other (non-company) mail to "personal"
+  ${symbol_pound} folder.
+  fileinto "personal";
+}
+</textarea></form>
+    <script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {});
+    </script>
+
+    <p><strong>MIME types defined:</strong> <code>application/sieve</code>.</p>
+
+  </body>
+</html>

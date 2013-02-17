@@ -1,0 +1,64 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>${groupId}</groupId>
+        <artifactId>parent</artifactId>
+        <version>${version}</version>
+        <relativePath>../parent/pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>${groupId}</groupId>
+    <artifactId>orgunits</artifactId>
+    <packaging>pom</packaging>
+    <name>OpenCms Orgunits</name>
+    <description>OpenCms Orgunits</description>
+    <url>http://projectsites.intra.comundus.de/projects/cm-comundus/opencms-basic/orgunits</url>
+
+    <scm>
+        <!-- connection></connection -->
+        <developerConnection>scm:svn:http://subversion/svn/projects/cm-comundus/opencms-basic/trunk/orguits</developerConnection>
+        <url>http://subversion/svn/projects/cm-comundus/opencms-basic/trunk/orgunits</url>
+        <tag/>
+    </scm>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.comundus.maven</groupId>
+                <artifactId>maven-vfs-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>sync</goal>
+                            <goal>publish</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <syncVFSPaths>
+                        <!-- syncVFSPath>/system/orgunits/testou/</syncVFSPath -->
+                    </syncVFSPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <distributionManagement>
+        <site>
+            <url>file:////Data02/projectsites/projects/cm-comundus/opencms-basic/orgunits</url>
+        </site>
+    </distributionManagement>
+
+</project>

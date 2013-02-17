@@ -1,0 +1,20 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<editor>
+	<label>TinyMCE</label>
+	<widgeteditor>org.opencms.editors.tinymce.CmsTinyMCEWidget</widgeteditor>
+	<resourcetypes>
+		<type>
+			<name>xmlpage</name>
+			<ranking>400</ranking>
+		</type>
+	</resourcetypes>
+	<useragents>
+		<agent>^Mozilla/[45]${symbol_escape}.0 ${symbol_escape}(compatible; MSIE .*${symbol_escape})${symbol_dollar}</agent>
+		<agent>^Mozilla/5${symbol_escape}.0 ${symbol_escape}(.*${symbol_escape}) Gecko/20${symbol_escape}d* .*${symbol_dollar}</agent>
+		<agent>^Mozilla/5${symbol_escape}.0 ${symbol_escape}(.*${symbol_escape}).*Chrome.*${symbol_dollar}</agent>
+		<agent>^Mozilla/5${symbol_escape}.0 ${symbol_escape}(.*${symbol_escape}).* Version/[34].* Safari.*${symbol_dollar}</agent>
+	</useragents>
+</editor>

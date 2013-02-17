@@ -1,0 +1,99 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CodeMirror: sTeX mode</title>
+    <link rel="stylesheet" href="../../lib/codemirror.css">
+    <script src="../../lib/codemirror.js"></script>
+    <script src="stex.js"></script>
+    <style>.CodeMirror {background: ${symbol_pound}f8f8f8;}</style>
+    <link rel="stylesheet" href="../../doc/docs.css">
+  </head>
+  <body>
+    <h1>CodeMirror: sTeX mode</h1>
+     <form><textarea id="code" name="code">
+${symbol_escape}begin{module}[id=bbt-size]
+${symbol_escape}importmodule[balanced-binary-trees]{balanced-binary-trees}
+${symbol_escape}importmodule[${symbol_escape}KWARCslides{dmath/en/cardinality}]{cardinality}
+
+${symbol_escape}begin{frame}
+  ${symbol_escape}frametitle{Size Lemma for Balanced Trees}
+  ${symbol_escape}begin{itemize}
+  ${symbol_escape}item
+    ${symbol_escape}begin{assertion}[id=size-lemma,type=lemma] 
+    Let ${symbol_dollar}G=${symbol_escape}tup{V,E}${symbol_dollar} be a ${symbol_escape}termref[cd=binary-trees]{balanced binary tree} 
+    of ${symbol_escape}termref[cd=graph-depth,name=vertex-depth]{depth}${symbol_dollar}n>i${symbol_dollar}, then the set
+     ${symbol_dollar}${symbol_escape}defeq{${symbol_escape}livar{V}i}{${symbol_escape}setst{${symbol_escape}inset{v}{V}}{${symbol_escape}gdepth{v} = i}}${symbol_dollar} of
+    ${symbol_escape}termref[cd=graphs-intro,name=node]{nodes} at 
+    ${symbol_escape}termref[cd=graph-depth,name=vertex-depth]{depth} ${symbol_dollar}i${symbol_dollar} has
+    ${symbol_escape}termref[cd=cardinality,name=cardinality]{cardinality} ${symbol_dollar}${symbol_escape}power2i${symbol_dollar}.
+   ${symbol_escape}end{assertion}
+  ${symbol_escape}item
+    ${symbol_escape}begin{sproof}[id=size-lemma-pf,proofend=,for=size-lemma]{via induction over the depth ${symbol_dollar}i${symbol_dollar}.}
+      ${symbol_escape}begin{spfcases}{We have to consider two cases}
+        ${symbol_escape}begin{spfcase}{${symbol_dollar}i=0${symbol_dollar}}
+          ${symbol_escape}begin{spfstep}[display=flow]
+            then ${symbol_dollar}${symbol_escape}livar{V}i=${symbol_escape}set{${symbol_escape}livar{v}r}${symbol_dollar}, where ${symbol_dollar}${symbol_escape}livar{v}r${symbol_dollar} is the root, so
+            ${symbol_dollar}${symbol_escape}eq{${symbol_escape}card{${symbol_escape}livar{V}0},${symbol_escape}card{${symbol_escape}set{${symbol_escape}livar{v}r}},1,${symbol_escape}power20}${symbol_dollar}.
+          ${symbol_escape}end{spfstep}
+        ${symbol_escape}end{spfcase}
+        ${symbol_escape}begin{spfcase}{${symbol_dollar}i>0${symbol_dollar}}
+          ${symbol_escape}begin{spfstep}[display=flow]
+           then ${symbol_dollar}${symbol_escape}livar{V}{i-1}${symbol_dollar} contains ${symbol_dollar}${symbol_escape}power2{i-1}${symbol_dollar} vertexes 
+           ${symbol_escape}begin{justification}[method=byIH](IH)${symbol_escape}end{justification}
+          ${symbol_escape}end{spfstep}
+          ${symbol_escape}begin{spfstep}
+           By the ${symbol_escape}begin{justification}[method=byDef]definition of a binary
+              tree${symbol_escape}end{justification}, each ${symbol_dollar}${symbol_escape}inset{v}{${symbol_escape}livar{V}{i-1}}${symbol_dollar} is a leaf or has
+            two children that are at depth ${symbol_dollar}i${symbol_dollar}.
+          ${symbol_escape}end{spfstep}
+          ${symbol_escape}begin{spfstep}
+           As ${symbol_dollar}G${symbol_dollar} is ${symbol_escape}termref[cd=balanced-binary-trees,name=balanced-binary-tree]{balanced} and ${symbol_dollar}${symbol_escape}gdepth{G}=n>i${symbol_dollar}, ${symbol_dollar}${symbol_escape}livar{V}{i-1}${symbol_dollar} cannot contain
+            leaves.
+          ${symbol_escape}end{spfstep}
+          ${symbol_escape}begin{spfstep}[type=conclusion]
+           Thus ${symbol_dollar}${symbol_escape}eq{${symbol_escape}card{${symbol_escape}livar{V}i},{${symbol_escape}atimes[cdot]{2,${symbol_escape}card{${symbol_escape}livar{V}{i-1}}}},{${symbol_escape}atimes[cdot]{2,${symbol_escape}power2{i-1}}},${symbol_escape}power2i}${symbol_dollar}.
+          ${symbol_escape}end{spfstep}
+        ${symbol_escape}end{spfcase}
+      ${symbol_escape}end{spfcases}
+    ${symbol_escape}end{sproof}
+  ${symbol_escape}item 
+    ${symbol_escape}begin{assertion}[id=fbbt,type=corollary]	
+      A fully balanced tree of depth ${symbol_dollar}d${symbol_dollar} has ${symbol_dollar}${symbol_escape}power2{d+1}-1${symbol_dollar} nodes.
+    ${symbol_escape}end{assertion}
+  ${symbol_escape}item
+      ${symbol_escape}begin{sproof}[for=fbbt,id=fbbt-pf]{}
+        ${symbol_escape}begin{spfstep}
+          Let ${symbol_dollar}${symbol_escape}defeq{G}{${symbol_escape}tup{V,E}}${symbol_dollar} be a fully balanced tree
+        ${symbol_escape}end{spfstep}
+        ${symbol_escape}begin{spfstep}
+          Then ${symbol_dollar}${symbol_escape}card{V}=${symbol_escape}Sumfromto{i}1d{${symbol_escape}power2i}= ${symbol_escape}power2{d+1}-1${symbol_dollar}.
+        ${symbol_escape}end{spfstep}
+      ${symbol_escape}end{sproof}
+    ${symbol_escape}end{itemize}
+  ${symbol_escape}end{frame}
+${symbol_escape}begin{note}
+  ${symbol_escape}begin{omtext}[type=conclusion,for=binary-tree]
+    This shows that balanced binary trees grow in breadth very quickly, a consequence of
+    this is that they are very shallow (and this compute very fast), which is the essence of
+    the next result.
+  ${symbol_escape}end{omtext}
+${symbol_escape}end{note}
+${symbol_escape}end{module}
+
+%%% Local Variables: 
+%%% mode: LaTeX
+%%% TeX-master: "all"
+%%% End: ${symbol_escape}end{document}
+</textarea></form>
+    <script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {});
+    </script>
+
+    <p><strong>MIME types defined:</strong> <code>text/x-stex</code>.</p>
+
+  </body>
+</html>

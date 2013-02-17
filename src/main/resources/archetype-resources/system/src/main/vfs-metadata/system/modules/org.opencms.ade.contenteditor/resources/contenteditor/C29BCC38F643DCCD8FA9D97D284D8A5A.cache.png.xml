@@ -1,0 +1,26 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+
+<export>
+	<file>
+		<destination>system/modules/org.opencms.ade.contenteditor/resources/contenteditor/C29BCC38F643DCCD8FA9D97D284D8A5A.cache.png</destination>
+		<type>image</type>
+		<uuidstructure>31a03f85-fd97-11e1-9bad-991063da6b19</uuidstructure>
+		<uuidresource>31a03f86-fd97-11e1-9bad-991063da6b19</uuidresource>
+		<datelastmodified>Thu, 13 Sep 2012 11:36:01 GMT</datelastmodified>
+		<userlastmodified>Admin</userlastmodified>
+		<datecreated>Thu, 13 Sep 2012 11:36:01 GMT</datecreated>
+		<usercreated>Admin</usercreated>
+		<flags>0</flags>
+		<properties>
+			<property type="shared">
+				<name>image.size</name>
+				<value><![CDATA[w:1228,h:32]]></value>
+			</property>
+		</properties>
+		<relations/>
+		<accesscontrol/>
+	</file>
+</export>

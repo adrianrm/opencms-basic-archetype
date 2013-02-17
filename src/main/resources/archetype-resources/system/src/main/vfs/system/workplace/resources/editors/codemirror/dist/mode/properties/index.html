@@ -1,0 +1,44 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CodeMirror: Properties files mode</title>
+    <link rel="stylesheet" href="../../lib/codemirror.css">
+    <script src="../../lib/codemirror.js"></script>
+    <script src="properties.js"></script>
+    <style>.CodeMirror {border-top: 1px solid ${symbol_pound}ddd; border-bottom: 1px solid ${symbol_pound}ddd;}</style>
+    <link rel="stylesheet" href="../../doc/docs.css">
+  </head>
+  <body>
+    <h1>CodeMirror: Properties files mode</h1>
+    <form><textarea id="code" name="code">
+${symbol_pound} This is a properties file
+a.key = A value
+another.key = http://example.com
+! Exclamation mark as comment
+but.not=Within ! A value ${symbol_pound} indeed
+   ${symbol_pound} Spaces at the beginning of a line
+   spaces.before.key=value
+backslash=Used for multi${symbol_escape}
+          line entries,${symbol_escape}
+          that's convenient.
+${symbol_pound} Unicode sequences
+unicode.key=This is ${symbol_escape}u0020 Unicode
+no.multiline=here
+${symbol_pound} Colons
+colons : can be used too
+${symbol_pound} Spaces
+spaces${symbol_escape} in${symbol_escape} keys=Not very common...
+</textarea></form>
+    <script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {});
+    </script>
+
+    <p><strong>MIME types defined:</strong> <code>text/x-properties</code>,
+    <code>text/x-ini</code>.</p>
+
+  </body>
+</html>

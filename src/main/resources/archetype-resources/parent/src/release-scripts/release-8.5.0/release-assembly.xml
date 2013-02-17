@@ -1,0 +1,60 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<!-- Assembly file for the release package VERSION_NUMBER -->
+<assembly>
+  <id>release</id>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <moduleSets>
+    <moduleSet>
+      <includes>
+        <include>com.comundus.opencms:webapp</include>
+      </includes>
+	  <sources>
+	   	<includeModuleDirectory>false</includeModuleDirectory>
+        <fileSets>
+            <!-- Webapp classes -->
+            <fileSet>
+                <directory>target/webapp/WEB-INF/classes</directory>
+                <outputDirectory>files</outputDirectory>
+                <includes>
+                	<include>**/version.properties</include>
+                	<!-- <include>jbpm.cfg.xml</include> -->
+                </includes>
+            </fileSet>
+            <!-- Webapp JARs
+	            we now get the jars with an Ant task, because we have to rename the files during copy
+            -->
+            <fileSet>
+                <directory>target/webapp/WEB-INF/lib</directory>
+                <outputDirectory>jar</outputDirectory>
+                <includes>
+                	<include>com.comundus*.jar</include>
+                	<!--include>com.customer.project.module.*.jar</include-->
+                </includes>
+                <!-- 
+					we need the excludes, if there is no include file. Otherwise all files in the specified folder are copied 
+				-->
+				<!--excludes>
+                	<exclude>*.jar</exclude>
+                </excludes-->
+            </fileSet>
+            <!-- 
+				if we want OpenCms configuration files within the release, comment them in 
+			-->
+            <!--fileSet>
+                <directory>target/webapp/WEB-INF/config</directory>
+                <outputDirectory>webapp/WEB-INF/config</outputDirectory>
+                <includes>
+                	<include>opencms-search.xml</include>
+                	<include>opencms-system.xml</include>
+                </includes>
+            </fileSet-->
+        </fileSets>
+    </sources>
+    </moduleSet>
+  </moduleSets>
+</assembly>

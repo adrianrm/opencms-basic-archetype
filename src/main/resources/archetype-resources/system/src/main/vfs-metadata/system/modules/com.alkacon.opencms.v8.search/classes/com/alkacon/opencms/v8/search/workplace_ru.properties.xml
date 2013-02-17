@@ -1,0 +1,21 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+
+<export>
+	<file>
+		<destination>system/modules/com.alkacon.opencms.v8.search/classes/com/alkacon/opencms/v8/search/workplace_ru.properties</destination>
+		<type>plain</type>
+		<uuidstructure>bf0b3318-74cf-11e1-98ad-6192c87e77fb</uuidstructure>
+		<uuidresource>bf0b3319-74cf-11e1-98ad-6192c87e77fb</uuidresource>
+		<datelastmodified>Fri, 23 Mar 2012 10:05:50 GMT</datelastmodified>
+		<userlastmodified>Admin</userlastmodified>
+		<datecreated>Fri, 23 Mar 2012 10:05:41 GMT</datecreated>
+		<usercreated>Admin</usercreated>
+		<flags>0</flags>
+		<properties/>
+		<relations/>
+		<accesscontrol/>
+	</file>
+</export>

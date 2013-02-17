@@ -1,0 +1,121 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>${groupId}</groupId>
+        <artifactId>parent</artifactId>
+        <version>${version}</version>
+        <relativePath>../parent/pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>${groupId}</groupId>
+    <artifactId>webapp</artifactId>
+    <packaging>war</packaging>
+    <name>OpenCms Webapp</name>
+    <description>OpenCms Webapplikation</description>
+    <url>http://projectsites.intra.comundus.de/projects/cm-comundus/opencms-basic/webapp</url>
+
+    <scm>
+        <!-- connection></connection -->
+        <developerConnection>scm:svn:http://subversion/svn/projects/cm-opencms/opencms-basic/trunk/webapp</developerConnection>
+        <url>http://subversion/svn/projects/cm-comundus/opencms-basic/trunk/webapp</url>
+    </scm>
+
+    <build>
+        <finalName>webapp</finalName>
+		<resources>
+      		<resource>
+        		<directory>src/main/webapp/WEB-INF/classes</directory>
+				<targetPath>../webapp/WEB-INF/classes</targetPath>
+        		<filtering>true</filtering>
+      		</resource>
+      		<resource>
+        		<directory>src/main/webapp/WEB-INF/config</directory>
+				<targetPath>../webapp/WEB-INF/config</targetPath>
+        		<filtering>true</filtering>
+      		</resource>
+    	</resources>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>droptables</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <fileset>
+                                <basedir>${symbol_dollar}{basedir}/src/main/scripts</basedir>
+                                <includes>
+                                    <include>${symbol_dollar}{drop_tables.sql}</include>
+                                </includes>
+                            </fileset>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>createtables</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <fileset>
+                                <basedir>${symbol_dollar}{basedir}/src/main/scripts</basedir>
+                                <includes>
+                                    <include>${symbol_dollar}{create_tables.sql}</include>
+                                </includes>
+                            </fileset>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.comundus.maven</groupId>
+                <artifactId>maven-vfs-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>setup</goal>
+                            <goal>importusers</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+	<dependencies>
+        <dependency>
+            <groupId>org.opencms</groupId>
+            <artifactId>opencms-core</artifactId>
+            <version>8.5.0</version>
+        </dependency>
+        <dependency>
+			<groupId>${symbol_dollar}{jdbcDriver.groupId}</groupId>
+			<artifactId>${symbol_dollar}{jdbcDriver.artifactId}</artifactId>
+			<version>${symbol_dollar}{jdbcDriver.version}</version>
+    	</dependency>
+
+    </dependencies>
+
+    <distributionManagement>
+        <site>
+            <url>file:////Data02/projectsites/projects/cm-comundus/opencms-basic/webapp</url>
+        </site>
+    </distributionManagement>
+
+</project>

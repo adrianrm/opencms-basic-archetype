@@ -1,0 +1,12 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+${symbol_pound} Set of French contractions for ElisionFilter
+${symbol_pound} TODO: load this as a resource from the analyzer and sync it in build.xml
+l
+m
+t
+qu
+n
+s
+j

@@ -1,0 +1,26 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+${symbol_pound} replace the name of this file to .htaccess (if using apache),
+${symbol_pound} and set the proper options and paths according your enviroment
+
+Allow from all
+
+${symbol_pound} If using mod_python uncomment this:
+PythonPath "[r'C:${symbol_escape}Archivos de programa${symbol_escape}Apache Software Foundation${symbol_escape}Apache2.2${symbol_escape}htdocs${symbol_escape}fckeditor${symbol_escape}editor${symbol_escape}filemanager${symbol_escape}connectors${symbol_escape}py'] + sys.path"
+
+
+${symbol_pound} Recomended: WSGI application running with mod_python and modpython_gateway
+SetHandler python-program
+PythonHandler modpython_gateway::handler
+PythonOption wsgi.application wsgi::App
+
+
+${symbol_pound} Emulated CGI with mod_python and cgihandler
+${symbol_pound}AddHandler mod_python .py
+${symbol_pound}PythonHandler mod_python.cgihandler
+
+
+${symbol_pound} Plain old CGI
+${symbol_pound}Options +ExecCGI
+${symbol_pound}AddHandler cgi-script py

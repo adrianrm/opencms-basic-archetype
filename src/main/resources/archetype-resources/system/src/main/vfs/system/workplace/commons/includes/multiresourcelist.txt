@@ -1,0 +1,7 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<!-- display resource information -->
+<%= wp.dialogBlockStart(wp.key(org.opencms.workplace.commons.Messages.GUI_MULTI_RESOURCELIST_TITLE_0)) %>
+<%= wp.buildResourceList() %>
+<%= wp.dialogBlockEnd() %>

@@ -1,0 +1,66 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CodeMirror: Perl mode</title>
+    <link rel="stylesheet" href="../../lib/codemirror.css">
+    <script src="../../lib/codemirror.js"></script>
+    <script src="perl.js"></script>
+    <link rel="stylesheet" href="../../doc/docs.css">
+    <style type="text/css">.CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}</style>
+  </head>
+  <body>
+    <h1>CodeMirror: Perl mode</h1>
+
+<div><textarea id="code" name="code">
+${symbol_pound}!/usr/bin/perl
+
+use Something qw(func1 func2);
+
+${symbol_pound} strings
+my ${symbol_dollar}s1 = qq'single line';
+our ${symbol_dollar}s2 = q(multi-
+              line);
+
+=item Something
+	Example.
+=cut
+
+my ${symbol_dollar}html=<<'HTML'
+<html>
+<title>hi!</title>
+</html>
+HTML
+
+print "first,".join(',', 'second', qq~third~);
+
+if(${symbol_dollar}s1 =~ m[(?<!${symbol_escape}s)(l.ne)${symbol_escape}z]o) {
+	${symbol_dollar}h->{${symbol_dollar}1}=${symbol_dollar}${symbol_dollar}.' predefined variables';
+	${symbol_dollar}s2 =~ s/${symbol_escape}-line//ox;
+	${symbol_dollar}s1 =~ s[
+		  line ]
+		[
+		  block
+		]ox;
+}
+
+1; ${symbol_pound} numbers and comments
+
+__END__
+something...
+
+</textarea></div>
+
+    <script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        matchBrackets: true
+      });
+    </script>
+
+    <p><strong>MIME types defined:</strong> <code>text/x-perl</code>.</p>
+  </body>
+</html>

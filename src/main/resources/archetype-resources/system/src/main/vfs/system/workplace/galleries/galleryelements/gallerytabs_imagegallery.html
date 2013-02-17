@@ -1,0 +1,15 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+            	<ul>
+            		<% if (wp.isModeWidget() || wp.isModeEditor()) { %>
+                	<li><a href="${symbol_pound}preview"><span><%= wp.key(Messages.GUI_GALLERY_TAB_PREVIEW_0) %></span></a></li>
+                	<% } %>
+                	<li><a href="${symbol_pound}galleries"><span><%= wp.key(Messages.GUI_GALLERY_TAB_GALLERIES_0) %></span></a></li>
+                	<% if (wp.isModeWidget() || wp.isModeEditor()) { %>
+                	<li><a href="${symbol_pound}categories"><span><%= wp.key(Messages.GUI_GALLERY_TAB_CATEGORIES_0) %></span></a></li>
+                	<% } %>
+                	<% if (wp.isModeEditor()) { %>
+                	<li><a href="${symbol_pound}advanced"><span><%= wp.key(Messages.GUI_GALLERY_TAB_ADVANCED_0) %></span></a></li>
+                	<% } %>
+            	</ul>

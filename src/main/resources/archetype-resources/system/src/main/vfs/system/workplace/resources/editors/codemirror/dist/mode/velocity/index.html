@@ -1,0 +1,107 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CodeMirror: Velocity mode</title>
+    <link rel="stylesheet" href="../../lib/codemirror.css">
+    <script src="../../lib/codemirror.js"></script>
+    <script src="velocity.js"></script>
+    <link rel="stylesheet" href="../../theme/night.css">
+    <style>.CodeMirror {border: 1px solid black;}</style>
+    <link rel="stylesheet" href="../../doc/docs.css">
+  </head>
+  <body>
+    <h1>CodeMirror: Velocity mode</h1>
+    <form><textarea id="code" name="code">
+${symbol_pound}${symbol_pound} Velocity Code Demo
+${symbol_pound}*
+   based on PL/SQL mode by Peter Raganitsch, adapted to Velocity by Steve O'Hara ( http://www.pivotal-solutions.co.uk )
+   August 2011
+*${symbol_pound}
+
+${symbol_pound}*
+   This is a multiline comment.
+   This is the second line
+*${symbol_pound}
+
+${symbol_pound}[[ hello steve
+   This has invalid syntax that would normally need "poor man's escaping" like:
+
+   ${symbol_pound}define()
+
+   ${symbol_dollar}{blah
+]]${symbol_pound}
+
+${symbol_pound}include( "disclaimer.txt" "opinion.txt" )
+${symbol_pound}include( ${symbol_dollar}foo ${symbol_dollar}bar )
+
+${symbol_pound}parse( "lecorbusier.vm" )
+${symbol_pound}parse( ${symbol_dollar}foo )
+
+${symbol_pound}evaluate( 'string with VTL ${symbol_pound}if(true)will be displayed${symbol_pound}end' )
+
+${symbol_pound}define( ${symbol_dollar}hello ) Hello ${symbol_dollar}who ${symbol_pound}end ${symbol_pound}set( ${symbol_dollar}who = "World!") ${symbol_dollar}hello ${symbol_pound}${symbol_pound} displays Hello World!
+
+${symbol_pound}foreach( ${symbol_dollar}customer in ${symbol_dollar}customerList )
+
+    ${symbol_dollar}foreach.count ${symbol_dollar}customer.Name
+
+    ${symbol_pound}if( ${symbol_dollar}foo == ${symbol_dollar}{bar})
+        it's true!
+        ${symbol_pound}break
+    ${symbol_pound}{else}
+        it's not!
+        ${symbol_pound}stop
+    ${symbol_pound}end
+
+    ${symbol_pound}if (${symbol_dollar}foreach.parent.hasNext)
+        ${symbol_dollar}velocityCount
+    ${symbol_pound}end
+${symbol_pound}end
+
+${symbol_dollar}someObject.getValues("this is a string split
+        across lines")
+
+${symbol_pound}macro( tablerows ${symbol_dollar}color ${symbol_dollar}somelist )
+    ${symbol_pound}foreach( ${symbol_dollar}something in ${symbol_dollar}somelist )
+        <tr><td bgcolor=${symbol_dollar}color>${symbol_dollar}something</td></tr>
+    ${symbol_pound}end
+${symbol_pound}end
+
+${symbol_pound}tablerows("red" ["dadsdf","dsa"])
+
+   Variable reference: ${symbol_pound}set( ${symbol_dollar}monkey = ${symbol_dollar}bill )
+   String literal: ${symbol_pound}set( ${symbol_dollar}monkey.Friend = 'monica' )
+   Property reference: ${symbol_pound}set( ${symbol_dollar}monkey.Blame = ${symbol_dollar}whitehouse.Leak )
+   Method reference: ${symbol_pound}set( ${symbol_dollar}monkey.Plan = ${symbol_dollar}spindoctor.weave(${symbol_dollar}web) )
+   Number literal: ${symbol_pound}set( ${symbol_dollar}monkey.Number = 123 )
+   Range operator: ${symbol_pound}set( ${symbol_dollar}monkey.Numbers = [1..3] )
+   Object list: ${symbol_pound}set( ${symbol_dollar}monkey.Say = ["Not", ${symbol_dollar}my, "fault"] )
+   Object map: ${symbol_pound}set( ${symbol_dollar}monkey.Map = {"banana" : "good", "roast beef" : "bad"})
+
+The RHS can also be a simple arithmetic expression, such as:
+Addition: ${symbol_pound}set( ${symbol_dollar}value = ${symbol_dollar}foo + 1 )
+   Subtraction: ${symbol_pound}set( ${symbol_dollar}value = ${symbol_dollar}bar - 1 )
+   Multiplication: ${symbol_pound}set( ${symbol_dollar}value = ${symbol_dollar}foo * ${symbol_dollar}bar )
+   Division: ${symbol_pound}set( ${symbol_dollar}value = ${symbol_dollar}foo / ${symbol_dollar}bar )
+   Remainder: ${symbol_pound}set( ${symbol_dollar}value = ${symbol_dollar}foo % ${symbol_dollar}bar )
+
+</textarea></form>
+    <script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        tabMode: "indent",
+        matchBrackets: true,
+        theme: "night",
+        lineNumbers: true,
+        indentUnit: 4,
+        mode: "text/velocity"
+      });
+    </script>
+
+    <p><strong>MIME types defined:</strong> <code>text/velocity</code>.</p>
+
+  </body>
+</html>

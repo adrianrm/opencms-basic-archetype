@@ -1,0 +1,731 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CodeMirror: CoffeeScript mode</title>
+    <link rel="stylesheet" href="../../lib/codemirror.css">
+    <script src="../../lib/codemirror.js"></script>
+    <script src="coffeescript.js"></script>
+    <style>.CodeMirror {border-top: 1px solid silver; border-bottom: 1px solid silver;}</style>
+    <link rel="stylesheet" href="../../doc/docs.css">
+  </head>
+  <body>
+    <h1>CodeMirror: CoffeeScript mode</h1>
+    <form><textarea id="code" name="code">
+${symbol_pound} CoffeeScript mode for CodeMirror
+${symbol_pound} Copyright (c) 2011 Jeff Pickhardt, released under
+${symbol_pound} the MIT License.
+${symbol_pound}
+${symbol_pound} Modified from the Python CodeMirror mode, which also is 
+${symbol_pound} under the MIT License Copyright (c) 2010 Timothy Farrell.
+${symbol_pound}
+${symbol_pound} The following script, Underscore.coffee, is used to 
+${symbol_pound} demonstrate CoffeeScript mode for CodeMirror.
+${symbol_pound}
+${symbol_pound} To download CoffeeScript mode for CodeMirror, go to:
+${symbol_pound} https://github.com/pickhardt/coffeescript-codemirror-mode
+
+${symbol_pound} **Underscore.coffee
+${symbol_pound} (c) 2011 Jeremy Ashkenas, DocumentCloud Inc.**
+${symbol_pound} Underscore is freely distributable under the terms of the
+${symbol_pound} [MIT license](http://en.wikipedia.org/wiki/MIT_License).
+${symbol_pound} Portions of Underscore are inspired by or borrowed from
+${symbol_pound} [Prototype.js](http://prototypejs.org/api), Oliver Steele's
+${symbol_pound} [Functional](http://osteele.com), and John Resig's
+${symbol_pound} [Micro-Templating](http://ejohn.org).
+${symbol_pound} For all details and documentation:
+${symbol_pound} http://documentcloud.github.com/underscore/
+
+
+${symbol_pound} Baseline setup
+${symbol_pound} --------------
+
+${symbol_pound} Establish the root object, `window` in the browser, or `global` on the server.
+root = this
+
+
+${symbol_pound} Save the previous value of the `_` variable.
+previousUnderscore = root._
+
+${symbol_pound}${symbol_pound}${symbol_pound} Multiline
+    comment
+${symbol_pound}${symbol_pound}${symbol_pound}
+
+${symbol_pound} Establish the object that gets thrown to break out of a loop iteration.
+${symbol_pound} `StopIteration` is SOP on Mozilla.
+breaker = if typeof(StopIteration) is 'undefined' then '__break__' else StopIteration
+
+
+${symbol_pound}${symbol_pound}${symbol_pound}${symbol_pound} Docco style single line comment (title)
+
+
+${symbol_pound} Helper function to escape **RegExp** contents, because JS doesn't have one.
+escapeRegExp = (string) -> string.replace(/([.*+?^${symbol_dollar}{}()|[${symbol_escape}]${symbol_escape}/${symbol_escape}${symbol_escape}])/g, '${symbol_escape}${symbol_escape}${symbol_dollar}1')
+
+
+${symbol_pound} Save bytes in the minified (but not gzipped) version:
+ArrayProto = Array.prototype
+ObjProto = Object.prototype
+
+
+${symbol_pound} Create quick reference variables for speed access to core prototypes.
+slice = ArrayProto.slice
+unshift = ArrayProto.unshift
+toString = ObjProto.toString
+hasOwnProperty = ObjProto.hasOwnProperty
+propertyIsEnumerable = ObjProto.propertyIsEnumerable
+
+
+${symbol_pound} All **ECMA5** native implementations we hope to use are declared here.
+nativeForEach = ArrayProto.forEach
+nativeMap = ArrayProto.map
+nativeReduce = ArrayProto.reduce
+nativeReduceRight = ArrayProto.reduceRight
+nativeFilter = ArrayProto.filter
+nativeEvery = ArrayProto.every
+nativeSome = ArrayProto.some
+nativeIndexOf = ArrayProto.indexOf
+nativeLastIndexOf = ArrayProto.lastIndexOf
+nativeIsArray = Array.isArray
+nativeKeys = Object.keys
+
+
+${symbol_pound} Create a safe reference to the Underscore object for use below.
+_ = (obj) -> new wrapper(obj)
+
+
+${symbol_pound} Export the Underscore object for **CommonJS**.
+if typeof(exports) != 'undefined' then exports._ = _
+
+
+${symbol_pound} Export Underscore to global scope.
+root._ = _
+
+
+${symbol_pound} Current version.
+_.VERSION = '1.1.0'
+
+
+${symbol_pound} Collection Functions
+${symbol_pound} --------------------
+
+${symbol_pound} The cornerstone, an **each** implementation.
+${symbol_pound} Handles objects implementing **forEach**, arrays, and raw objects.
+_.each = (obj, iterator, context) ->
+  try
+    if nativeForEach and obj.forEach is nativeForEach
+      obj.forEach iterator, context
+    else if _.isNumber obj.length
+      iterator.call context, obj[i], i, obj for i in [0...obj.length]
+    else
+      iterator.call context, val, key, obj for own key, val of obj
+  catch e
+    throw e if e isnt breaker
+  obj
+
+
+${symbol_pound} Return the results of applying the iterator to each element. Use JavaScript
+${symbol_pound} 1.6's version of **map**, if possible.
+_.map = (obj, iterator, context) ->
+  return obj.map(iterator, context) if nativeMap and obj.map is nativeMap
+  results = []
+  _.each obj, (value, index, list) ->
+    results.push iterator.call context, value, index, list
+  results
+
+
+${symbol_pound} **Reduce** builds up a single result from a list of values. Also known as
+${symbol_pound} **inject**, or **foldl**. Uses JavaScript 1.8's version of **reduce**, if possible.
+_.reduce = (obj, iterator, memo, context) ->
+  if nativeReduce and obj.reduce is nativeReduce
+    iterator = _.bind iterator, context if context
+    return obj.reduce iterator, memo
+  _.each obj, (value, index, list) ->
+    memo = iterator.call context, memo, value, index, list
+  memo
+
+
+${symbol_pound} The right-associative version of **reduce**, also known as **foldr**. Uses
+${symbol_pound} JavaScript 1.8's version of **reduceRight**, if available.
+_.reduceRight = (obj, iterator, memo, context) ->
+  if nativeReduceRight and obj.reduceRight is nativeReduceRight
+    iterator = _.bind iterator, context if context
+    return obj.reduceRight iterator, memo
+  reversed = _.clone(_.toArray(obj)).reverse()
+  _.reduce reversed, iterator, memo, context
+
+
+${symbol_pound} Return the first value which passes a truth test.
+_.detect = (obj, iterator, context) ->
+  result = null
+  _.each obj, (value, index, list) ->
+    if iterator.call context, value, index, list
+      result = value
+      _.breakLoop()
+  result
+
+
+${symbol_pound} Return all the elements that pass a truth test. Use JavaScript 1.6's
+${symbol_pound} **filter**, if it exists.
+_.filter = (obj, iterator, context) ->
+  return obj.filter iterator, context if nativeFilter and obj.filter is nativeFilter
+  results = []
+  _.each obj, (value, index, list) ->
+    results.push value if iterator.call context, value, index, list
+  results
+
+
+${symbol_pound} Return all the elements for which a truth test fails.
+_.reject = (obj, iterator, context) ->
+  results = []
+  _.each obj, (value, index, list) ->
+    results.push value if not iterator.call context, value, index, list
+  results
+
+
+${symbol_pound} Determine whether all of the elements match a truth test. Delegate to
+${symbol_pound} JavaScript 1.6's **every**, if it is present.
+_.every = (obj, iterator, context) ->
+  iterator ||= _.identity
+  return obj.every iterator, context if nativeEvery and obj.every is nativeEvery
+  result = true
+  _.each obj, (value, index, list) ->
+    _.breakLoop() unless (result = result and iterator.call(context, value, index, list))
+  result
+
+
+${symbol_pound} Determine if at least one element in the object matches a truth test. Use
+${symbol_pound} JavaScript 1.6's **some**, if it exists.
+_.some = (obj, iterator, context) ->
+  iterator ||= _.identity
+  return obj.some iterator, context if nativeSome and obj.some is nativeSome
+  result = false
+  _.each obj, (value, index, list) ->
+    _.breakLoop() if (result = iterator.call(context, value, index, list))
+  result
+
+
+${symbol_pound} Determine if a given value is included in the array or object,
+${symbol_pound} based on `===`.
+_.include = (obj, target) ->
+  return _.indexOf(obj, target) isnt -1 if nativeIndexOf and obj.indexOf is nativeIndexOf
+  return true for own key, val of obj when val is target
+  false
+
+
+${symbol_pound} Invoke a method with arguments on every item in a collection.
+_.invoke = (obj, method) ->
+  args = _.rest arguments, 2
+  (if method then val[method] else val).apply(val, args) for val in obj
+
+
+${symbol_pound} Convenience version of a common use case of **map**: fetching a property.
+_.pluck = (obj, key) ->
+  _.map(obj, (val) -> val[key])
+
+
+${symbol_pound} Return the maximum item or (item-based computation).
+_.max = (obj, iterator, context) ->
+  return Math.max.apply(Math, obj) if not iterator and _.isArray(obj)
+  result = computed: -Infinity
+  _.each obj, (value, index, list) ->
+    computed = if iterator then iterator.call(context, value, index, list) else value
+    computed >= result.computed and (result = {value: value, computed: computed})
+  result.value
+
+
+${symbol_pound} Return the minimum element (or element-based computation).
+_.min = (obj, iterator, context) ->
+  return Math.min.apply(Math, obj) if not iterator and _.isArray(obj)
+  result = computed: Infinity
+  _.each obj, (value, index, list) ->
+    computed = if iterator then iterator.call(context, value, index, list) else value
+    computed < result.computed and (result = {value: value, computed: computed})
+  result.value
+
+
+${symbol_pound} Sort the object's values by a criterion produced by an iterator.
+_.sortBy = (obj, iterator, context) ->
+  _.pluck(((_.map obj, (value, index, list) ->
+    {value: value, criteria: iterator.call(context, value, index, list)}
+  ).sort((left, right) ->
+    a = left.criteria; b = right.criteria
+    if a < b then -1 else if a > b then 1 else 0
+  )), 'value')
+
+
+${symbol_pound} Use a comparator function to figure out at what index an object should
+${symbol_pound} be inserted so as to maintain order. Uses binary search.
+_.sortedIndex = (array, obj, iterator) ->
+  iterator ||= _.identity
+  low = 0
+  high = array.length
+  while low < high
+    mid = (low + high) >> 1
+    if iterator(array[mid]) < iterator(obj) then low = mid + 1 else high = mid
+  low
+
+
+${symbol_pound} Convert anything iterable into a real, live array.
+_.toArray = (iterable) ->
+  return [] if (!iterable)
+  return iterable.toArray() if (iterable.toArray)
+  return iterable if (_.isArray(iterable))
+  return slice.call(iterable) if (_.isArguments(iterable))
+  _.values(iterable)
+
+
+${symbol_pound} Return the number of elements in an object.
+_.size = (obj) -> _.toArray(obj).length
+
+
+${symbol_pound} Array Functions
+${symbol_pound} ---------------
+
+${symbol_pound} Get the first element of an array. Passing `n` will return the first N
+${symbol_pound} values in the array. Aliased as **head**. The `guard` check allows it to work
+${symbol_pound} with **map**.
+_.first = (array, n, guard) ->
+  if n and not guard then slice.call(array, 0, n) else array[0]
+
+
+${symbol_pound} Returns everything but the first entry of the array. Aliased as **tail**.
+${symbol_pound} Especially useful on the arguments object. Passing an `index` will return
+${symbol_pound} the rest of the values in the array from that index onward. The `guard`
+${symbol_pound} check allows it to work with **map**.
+_.rest = (array, index, guard) ->
+  slice.call(array, if _.isUndefined(index) or guard then 1 else index)
+
+
+${symbol_pound} Get the last element of an array.
+_.last = (array) -> array[array.length - 1]
+
+
+${symbol_pound} Trim out all falsy values from an array.
+_.compact = (array) -> item for item in array when item
+
+
+${symbol_pound} Return a completely flattened version of an array.
+_.flatten = (array) ->
+  _.reduce array, (memo, value) ->
+    return memo.concat(_.flatten(value)) if _.isArray value
+    memo.push value
+    memo
+  , []
+
+
+${symbol_pound} Return a version of the array that does not contain the specified value(s).
+_.without = (array) ->
+  values = _.rest arguments
+  val for val in _.toArray(array) when not _.include values, val
+
+
+${symbol_pound} Produce a duplicate-free version of the array. If the array has already
+${symbol_pound} been sorted, you have the option of using a faster algorithm.
+_.uniq = (array, isSorted) ->
+  memo = []
+  for el, i in _.toArray array
+    memo.push el if i is 0 || (if isSorted is true then _.last(memo) isnt el else not _.include(memo, el))
+  memo
+
+
+${symbol_pound} Produce an array that contains every item shared between all the
+${symbol_pound} passed-in arrays.
+_.intersect = (array) ->
+  rest = _.rest arguments
+  _.select _.uniq(array), (item) ->
+    _.all rest, (other) ->
+      _.indexOf(other, item) >= 0
+
+
+${symbol_pound} Zip together multiple lists into a single array -- elements that share
+${symbol_pound} an index go together.
+_.zip = ->
+  length = _.max _.pluck arguments, 'length'
+  results = new Array length
+  for i in [0...length]
+    results[i] = _.pluck arguments, String i
+  results
+
+
+${symbol_pound} If the browser doesn't supply us with **indexOf** (I'm looking at you, MSIE),
+${symbol_pound} we need this function. Return the position of the first occurrence of an
+${symbol_pound} item in an array, or -1 if the item is not included in the array.
+_.indexOf = (array, item) ->
+  return array.indexOf item if nativeIndexOf and array.indexOf is nativeIndexOf
+  i = 0; l = array.length
+  while l - i
+    if array[i] is item then return i else i++
+  -1
+
+
+${symbol_pound} Provide JavaScript 1.6's **lastIndexOf**, delegating to the native function,
+${symbol_pound} if possible.
+_.lastIndexOf = (array, item) ->
+  return array.lastIndexOf(item) if nativeLastIndexOf and array.lastIndexOf is nativeLastIndexOf
+  i = array.length
+  while i
+    if array[i] is item then return i else i--
+  -1
+
+
+${symbol_pound} Generate an integer Array containing an arithmetic progression. A port of
+${symbol_pound} [the native Python **range** function](http://docs.python.org/library/functions.html${symbol_pound}range).
+_.range = (start, stop, step) ->
+  a = arguments
+  solo = a.length <= 1
+  i = start = if solo then 0 else a[0]
+  stop = if solo then a[0] else a[1]
+  step = a[2] or 1
+  len = Math.ceil((stop - start) / step)
+  return [] if len <= 0
+  range = new Array len
+  idx = 0
+  loop
+    return range if (if step > 0 then i - stop else stop - i) >= 0
+    range[idx] = i
+    idx++
+    i+= step
+
+
+${symbol_pound} Function Functions
+${symbol_pound} ------------------
+
+${symbol_pound} Create a function bound to a given object (assigning `this`, and arguments,
+${symbol_pound} optionally). Binding with arguments is also known as **curry**.
+_.bind = (func, obj) ->
+  args = _.rest arguments, 2
+  -> func.apply obj or root, args.concat arguments
+
+
+${symbol_pound} Bind all of an object's methods to that object. Useful for ensuring that
+${symbol_pound} all callbacks defined on an object belong to it.
+_.bindAll = (obj) ->
+  funcs = if arguments.length > 1 then _.rest(arguments) else _.functions(obj)
+  _.each funcs, (f) -> obj[f] = _.bind obj[f], obj
+  obj
+
+
+${symbol_pound} Delays a function for the given number of milliseconds, and then calls
+${symbol_pound} it with the arguments supplied.
+_.delay = (func, wait) ->
+  args = _.rest arguments, 2
+  setTimeout((-> func.apply(func, args)), wait)
+
+
+${symbol_pound} Memoize an expensive function by storing its results.
+_.memoize = (func, hasher) ->
+  memo = {}
+  hasher or= _.identity
+  ->
+    key = hasher.apply this, arguments
+    return memo[key] if key of memo
+    memo[key] = func.apply this, arguments
+
+
+${symbol_pound} Defers a function, scheduling it to run after the current call stack has
+${symbol_pound} cleared.
+_.defer = (func) ->
+  _.delay.apply _, [func, 1].concat _.rest arguments
+
+
+${symbol_pound} Returns the first function passed as an argument to the second,
+${symbol_pound} allowing you to adjust arguments, run code before and after, and
+${symbol_pound} conditionally execute the original function.
+_.wrap = (func, wrapper) ->
+  -> wrapper.apply wrapper, [func].concat arguments
+
+
+${symbol_pound} Returns a function that is the composition of a list of functions, each
+${symbol_pound} consuming the return value of the function that follows.
+_.compose = ->
+  funcs = arguments
+  ->
+    args = arguments
+    for i in [funcs.length - 1..0] by -1
+      args = [funcs[i].apply(this, args)]
+    args[0]
+
+
+${symbol_pound} Object Functions
+${symbol_pound} ----------------
+
+${symbol_pound} Retrieve the names of an object's properties.
+_.keys = nativeKeys or (obj) ->
+  return _.range 0, obj.length if _.isArray(obj)
+  key for key, val of obj
+
+
+${symbol_pound} Retrieve the values of an object's properties.
+_.values = (obj) ->
+  _.map obj, _.identity
+
+
+${symbol_pound} Return a sorted list of the function names available in Underscore.
+_.functions = (obj) ->
+  _.filter(_.keys(obj), (key) -> _.isFunction(obj[key])).sort()
+
+
+${symbol_pound} Extend a given object with all of the properties in a source object.
+_.extend = (obj) ->
+  for source in _.rest(arguments)
+    obj[key] = val for key, val of source
+  obj
+
+
+${symbol_pound} Create a (shallow-cloned) duplicate of an object.
+_.clone = (obj) ->
+  return obj.slice 0 if _.isArray obj
+  _.extend {}, obj
+
+
+${symbol_pound} Invokes interceptor with the obj, and then returns obj.
+${symbol_pound} The primary purpose of this method is to "tap into" a method chain,
+${symbol_pound} in order to perform operations on intermediate results within
+ the chain.
+_.tap = (obj, interceptor) ->
+  interceptor obj
+  obj
+
+
+${symbol_pound} Perform a deep comparison to check if two objects are equal.
+_.isEqual = (a, b) ->
+  ${symbol_pound} Check object identity.
+  return true if a is b
+  ${symbol_pound} Different types?
+  atype = typeof(a); btype = typeof(b)
+  return false if atype isnt btype
+  ${symbol_pound} Basic equality test (watch out for coercions).
+  return true if `a == b`
+  ${symbol_pound} One is falsy and the other truthy.
+  return false if (!a and b) or (a and !b)
+  ${symbol_pound} One of them implements an `isEqual()`?
+  return a.isEqual(b) if a.isEqual
+  ${symbol_pound} Check dates' integer values.
+  return a.getTime() is b.getTime() if _.isDate(a) and _.isDate(b)
+  ${symbol_pound} Both are NaN?
+  return false if _.isNaN(a) and _.isNaN(b)
+  ${symbol_pound} Compare regular expressions.
+  if _.isRegExp(a) and _.isRegExp(b)
+    return a.source is b.source and
+           a.global is b.global and
+           a.ignoreCase is b.ignoreCase and
+           a.multiline is b.multiline
+  ${symbol_pound} If a is not an object by this point, we can't handle it.
+  return false if atype isnt 'object'
+  ${symbol_pound} Check for different array lengths before comparing contents.
+  return false if a.length and (a.length isnt b.length)
+  ${symbol_pound} Nothing else worked, deep compare the contents.
+  aKeys = _.keys(a); bKeys = _.keys(b)
+  ${symbol_pound} Different object sizes?
+  return false if aKeys.length isnt bKeys.length
+  ${symbol_pound} Recursive comparison of contents.
+  return false for key, val of a when !(key of b) or !_.isEqual(val, b[key])
+  true
+
+
+${symbol_pound} Is a given array or object empty?
+_.isEmpty = (obj) ->
+  return obj.length is 0 if _.isArray(obj) or _.isString(obj)
+  return false for own key of obj
+  true
+
+
+${symbol_pound} Is a given value a DOM element?
+_.isElement = (obj) -> obj and obj.nodeType is 1
+
+
+${symbol_pound} Is a given value an array?
+_.isArray = nativeIsArray or (obj) -> !!(obj and obj.concat and obj.unshift and not obj.callee)
+
+
+${symbol_pound} Is a given variable an arguments object?
+_.isArguments = (obj) -> obj and obj.callee
+
+
+${symbol_pound} Is the given value a function?
+_.isFunction = (obj) -> !!(obj and obj.constructor and obj.call and obj.apply)
+
+
+${symbol_pound} Is the given value a string?
+_.isString = (obj) -> !!(obj is '' or (obj and obj.charCodeAt and obj.substr))
+
+
+${symbol_pound} Is a given value a number?
+_.isNumber = (obj) -> (obj is +obj) or toString.call(obj) is '[object Number]'
+
+
+${symbol_pound} Is a given value a boolean?
+_.isBoolean = (obj) -> obj is true or obj is false
+
+
+${symbol_pound} Is a given value a Date?
+_.isDate = (obj) -> !!(obj and obj.getTimezoneOffset and obj.setUTCFullYear)
+
+
+${symbol_pound} Is the given value a regular expression?
+_.isRegExp = (obj) -> !!(obj and obj.exec and (obj.ignoreCase or obj.ignoreCase is false))
+
+
+${symbol_pound} Is the given value NaN -- this one is interesting. `NaN != NaN`, and
+${symbol_pound} `isNaN(undefined) == true`, so we make sure it's a number first.
+_.isNaN = (obj) -> _.isNumber(obj) and window.isNaN(obj)
+
+
+${symbol_pound} Is a given value equal to null?
+_.isNull = (obj) -> obj is null
+
+
+${symbol_pound} Is a given variable undefined?
+_.isUndefined = (obj) -> typeof obj is 'undefined'
+
+
+${symbol_pound} Utility Functions
+${symbol_pound} -----------------
+
+${symbol_pound} Run Underscore.js in noConflict mode, returning the `_` variable to its
+${symbol_pound} previous owner. Returns a reference to the Underscore object.
+_.noConflict = ->
+  root._ = previousUnderscore
+  this
+
+
+${symbol_pound} Keep the identity function around for default iterators.
+_.identity = (value) -> value
+
+
+${symbol_pound} Run a function `n` times.
+_.times = (n, iterator, context) ->
+  iterator.call context, i for i in [0...n]
+
+
+${symbol_pound} Break out of the middle of an iteration.
+_.breakLoop = -> throw breaker
+
+
+${symbol_pound} Add your own custom functions to the Underscore object, ensuring that
+${symbol_pound} they're correctly added to the OOP wrapper as well.
+_.mixin = (obj) ->
+  for name in _.functions(obj)
+    addToWrapper name, _[name] = obj[name]
+
+
+${symbol_pound} Generate a unique integer id (unique within the entire client session).
+${symbol_pound} Useful for temporary DOM ids.
+idCounter = 0
+_.uniqueId = (prefix) ->
+  (prefix or '') + idCounter++
+
+
+${symbol_pound} By default, Underscore uses **ERB**-style template delimiters, change the
+${symbol_pound} following template settings to use alternative delimiters.
+_.templateSettings = {
+  start: '<%'
+  end: '%>'
+  interpolate: /<%=(.+?)%>/g
+}
+
+
+${symbol_pound} JavaScript templating a-la **ERB**, pilfered from John Resig's
+${symbol_pound} *Secrets of the JavaScript Ninja*, page 83.
+${symbol_pound} Single-quote fix from Rick Strahl.
+${symbol_pound} With alterations for arbitrary delimiters, and to preserve whitespace.
+_.template = (str, data) ->
+  c = _.templateSettings
+  endMatch = new RegExp("'(?=[^"+c.end.substr(0, 1)+"]*"+escapeRegExp(c.end)+")","g")
+  fn = new Function 'obj',
+    'var p=[],print=function(){p.push.apply(p,arguments);};' +
+    'with(obj||{}){p.push(${symbol_escape}'' +
+    str.replace(/${symbol_escape}r/g, '${symbol_escape}${symbol_escape}r')
+       .replace(/${symbol_escape}n/g, '${symbol_escape}${symbol_escape}n')
+       .replace(/${symbol_escape}t/g, '${symbol_escape}${symbol_escape}t')
+       .replace(endMatch,"���")
+       .split("'").join("${symbol_escape}${symbol_escape}'")
+       .split("���").join("'")
+       .replace(c.interpolate, "',${symbol_dollar}1,'")
+       .split(c.start).join("');")
+       .split(c.end).join("p.push('") +
+       "');}return p.join('');"
+  if data then fn(data) else fn
+
+
+${symbol_pound} Aliases
+${symbol_pound} -------
+
+_.forEach = _.each
+_.foldl = _.inject = _.reduce
+_.foldr = _.reduceRight
+_.select = _.filter
+_.all = _.every
+_.any = _.some
+_.contains = _.include
+_.head = _.first
+_.tail = _.rest
+_.methods = _.functions
+
+
+${symbol_pound} Setup the OOP Wrapper
+${symbol_pound} ---------------------
+
+${symbol_pound} If Underscore is called as a function, it returns a wrapped object that
+${symbol_pound} can be used OO-style. This wrapper holds altered versions of all the
+${symbol_pound} underscore functions. Wrapped objects may be chained.
+wrapper = (obj) ->
+  this._wrapped = obj
+  this
+
+
+${symbol_pound} Helper function to continue chaining intermediate results.
+result = (obj, chain) ->
+  if chain then _(obj).chain() else obj
+
+
+${symbol_pound} A method to easily add functions to the OOP wrapper.
+addToWrapper = (name, func) ->
+  wrapper.prototype[name] = ->
+    args = _.toArray arguments
+    unshift.call args, this._wrapped
+    result func.apply(_, args), this._chain
+
+
+${symbol_pound} Add all ofthe Underscore functions to the wrapper object.
+_.mixin _
+
+
+${symbol_pound} Add all mutator Array functions to the wrapper.
+_.each ['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], (name) ->
+  method = Array.prototype[name]
+  wrapper.prototype[name] = ->
+    method.apply(this._wrapped, arguments)
+    result(this._wrapped, this._chain)
+
+
+${symbol_pound} Add all accessor Array functions to the wrapper.
+_.each ['concat', 'join', 'slice'], (name) ->
+  method = Array.prototype[name]
+  wrapper.prototype[name] = ->
+    result(method.apply(this._wrapped, arguments), this._chain)
+
+
+${symbol_pound} Start chaining a wrapped Underscore object.
+wrapper::chain = ->
+  this._chain = true
+  this
+
+
+${symbol_pound} Extracts the result from a wrapped and chained object.
+wrapper::value = -> this._wrapped
+</textarea></form>
+    <script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {});
+    </script>
+
+    <p><strong>MIME types defined:</strong> <code>text/x-coffeescript</code>.</p>
+
+    <p>The CoffeeScript mode was written by Jeff Pickhardt (<a href="LICENSE">license</a>).</p>
+
+  </body>
+</html>

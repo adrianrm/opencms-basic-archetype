@@ -1,0 +1,1 @@
+REM syntax svn diff --summarize SVN_URL_TO_NEW_TAG SVN_URL_TO_OLD_TAG > ...\parent\target\spool-release\files\changed-files.txt

@@ -1,0 +1,12 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+loginUser Admin admin
+setCurrentProject "Offline"
+setSiteRoot "/"
+exportModule "com.comundus.modules.template"
+exportModule "de.mwsg.spool.cms.modules.login"
+exportResources "target/opencms-release/module/filename.zip" "/system/workplace/editors/editor_main.jsp;/system/workplace/commons/property_advanced.jsp;/system/workplace/commons/property_custom.jsp;/system/workplace/commons/property.jsp;/system/workplace/commons/property_multifile.jsp"
+setSiteRoot "/sites/default/"
+
+exit

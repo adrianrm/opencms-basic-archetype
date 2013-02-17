@@ -1,0 +1,5 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+Copyright (c) 2006,2007 comundus GmbH
+Sch?telgrabenring 3, 71332 Waiblingen, Germany

@@ -1,0 +1,267 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CodeMirror: sTeX mode</title>
+    <link rel="stylesheet" href="../../lib/codemirror.css">
+    <script src="../../lib/codemirror.js"></script>
+    <script src="stex.js"></script>
+    <link rel="stylesheet" href="../../test/mode_test.css">
+    <script src="../../test/mode_test.js"></script>
+    <link rel="stylesheet" href="../../doc/docs.css">
+  </head>
+  <body>
+    <h1>Tests for the sTeX Mode</h1>
+    <h2>Basics</h2>
+    <script language="javascript">
+      MT = ModeTest;
+
+      MT.test('foo',
+        null, 'foo');
+
+      MT.test('foo bar',
+        null, 'foo',
+        null, ' bar');
+    </script>
+
+    <h2>Tags</h2>
+    <script language="javascript">
+      MT.test('${symbol_escape}${symbol_escape}begin{document}${symbol_escape}n${symbol_escape}${symbol_escape}end{document}',
+        'tag',     '${symbol_escape}${symbol_escape}begin',
+        'bracket', '{',
+        'atom',    'document',
+        'bracket', '}',
+        'tag',     '${symbol_escape}${symbol_escape}end',
+        'bracket', '{',
+        'atom',    'document',
+        'bracket', '}');
+
+      MT.test('${symbol_escape}${symbol_escape}begin{equation}${symbol_escape}n  E=mc^2${symbol_escape}n${symbol_escape}${symbol_escape}end{equation}',
+        'tag',     '${symbol_escape}${symbol_escape}begin',
+        'bracket', '{',
+        'atom',    'equation',
+        'bracket', '}',
+        null,      ' ',
+        null,      ' ',
+        null,      'E',
+        null,      '=mc',
+        null,      '^2',
+        'tag',     '${symbol_escape}${symbol_escape}end',
+        'bracket', '{',
+        'atom',    'equation',
+        'bracket', '}');
+
+      MT.test('${symbol_escape}${symbol_escape}begin{module}[]',
+        'tag',     '${symbol_escape}${symbol_escape}begin',
+        'bracket', '{',
+        'atom',    'module',
+        'bracket', '}',
+        'bracket', '[',
+        'bracket', ']');
+
+      MT.test('${symbol_escape}${symbol_escape}begin{module}[id=bbt-size]',
+        'tag',     '${symbol_escape}${symbol_escape}begin',
+        'bracket', '{',
+        'atom',    'module',
+        'bracket', '}',
+        'bracket', '[',
+        null,      'id',
+        null,      '=bbt-size',
+        'bracket', ']');
+
+      MT.test('${symbol_escape}${symbol_escape}importmodule[b-b-t]{b-b-t}',
+        'tag',     '${symbol_escape}${symbol_escape}importmodule',
+        'bracket', '[',
+        'string',   'b-b-t',
+        'bracket', ']',
+        'bracket', '{',
+        'builtin', 'b-b-t',
+        'bracket', '}');
+
+      MT.test('${symbol_escape}${symbol_escape}importmodule[${symbol_escape}${symbol_escape}KWARCslides{dmath/en/cardinality}]{card}',
+        'tag',     '${symbol_escape}${symbol_escape}importmodule',
+        'bracket', '[',
+        'tag',     '${symbol_escape}${symbol_escape}KWARCslides',
+        'bracket', '{',
+        'string',   'dmath',
+        'string',   '/en',
+        'string',   '/cardinality',
+        'bracket', '}',
+        'bracket', ']',
+        'bracket', '{',
+        'builtin', 'card',
+        'bracket', '}');
+
+      MT.test('${symbol_escape}${symbol_escape}PSforPDF[1]{${symbol_pound}1}', // could treat ${symbol_pound}1 specially
+        'tag',     '${symbol_escape}${symbol_escape}PSforPDF',
+        'bracket', '[',
+        'atom',    '1',
+        'bracket', ']',
+        'bracket', '{',
+        null,      '${symbol_pound}1',
+        'bracket', '}');
+    </script>
+
+    <h2>Comments</h2>
+    <script language="javascript">
+      MT.test('% foo',
+        'comment', '%',
+        'comment', ' foo');
+
+      MT.test('${symbol_escape}${symbol_escape}item% bar',
+        'tag',     '${symbol_escape}${symbol_escape}item',
+        'comment', '%',
+        'comment', ' bar');
+
+      MT.test(' % ${symbol_escape}${symbol_escape}item',
+        null,      ' ',
+        'comment', '%',
+        'comment', ' ${symbol_escape}${symbol_escape}item');
+
+      MT.test('%${symbol_escape}nfoo',
+        'comment', '%',
+        null, 'foo');
+    </script>
+
+    <h2>Errors</h2>
+    <script language="javascript">
+      MT.test('${symbol_escape}${symbol_escape}begin}{',
+        'tag',     '${symbol_escape}${symbol_escape}begin',
+        'error',   '}',
+        'bracket', '{');
+
+      MT.test('${symbol_escape}${symbol_escape}item]{',
+        'tag',     '${symbol_escape}${symbol_escape}item',
+        'error',   ']',
+        'bracket', '{');
+
+      MT.test('% }',
+        'comment', '%',
+        'comment', ' }');
+    </script>
+
+    <h2>Character Escapes</h2>
+    <script language="javascript">
+      MT.test('the ${symbol_escape}${symbol_escape}${symbol_pound} key',
+        null,  'the',
+        null,  ' ',
+        'tag', '${symbol_escape}${symbol_escape}${symbol_pound}',
+        null,  ' key');
+
+      MT.test('a ${symbol_escape}${symbol_escape}${symbol_dollar}5 stetson',
+        null, 'a',
+        null, ' ',
+        'tag', '${symbol_escape}${symbol_escape}${symbol_dollar}',
+        'atom', 5,
+        null, ' stetson');
+
+      MT.test('100${symbol_escape}${symbol_escape}% beef',
+        'atom', '100',
+        'tag', '${symbol_escape}${symbol_escape}%',
+        null, ' beef');
+
+      MT.test('L ${symbol_escape}${symbol_escape}& N',
+        null, 'L',
+        null, ' ',
+        'tag', '${symbol_escape}${symbol_escape}&',
+        null, ' N');
+
+      MT.test('foo${symbol_escape}${symbol_escape}_bar',
+        null, 'foo',
+        'tag', '${symbol_escape}${symbol_escape}_',
+        null, 'bar');
+
+      MT.test('${symbol_escape}${symbol_escape}emph{${symbol_escape}${symbol_escape}{}',
+        'tag',    '${symbol_escape}${symbol_escape}emph',
+        'bracket','{',
+        'tag',    '${symbol_escape}${symbol_escape}{',
+        'bracket','}');
+
+      MT.test('${symbol_escape}${symbol_escape}emph{${symbol_escape}${symbol_escape}}}',
+        'tag',    '${symbol_escape}${symbol_escape}emph',
+        'bracket','{',
+        'tag',    '${symbol_escape}${symbol_escape}}',
+        'bracket','}');
+
+      MT.test('section ${symbol_escape}${symbol_escape}S1',
+        null,  'section',
+        null,  ' ',
+        'tag', '${symbol_escape}${symbol_escape}S',
+        'atom',  '1');
+
+      MT.test('para ${symbol_escape}${symbol_escape}P2',
+        null,  'para',
+        null,  ' ',
+        'tag', '${symbol_escape}${symbol_escape}P',
+        'atom',  '2');
+
+    </script>
+
+    <h2>Spacing control</h2>
+
+    <script language="javascript">
+      MT.test('x${symbol_escape}${symbol_escape},y', // thinspace
+        null,  'x',
+        'tag', '${symbol_escape}${symbol_escape},',
+        null,  'y');
+
+      MT.test('x${symbol_escape}${symbol_escape};y', // thickspace
+        null,  'x',
+        'tag', '${symbol_escape}${symbol_escape};',
+        null,  'y');
+
+      MT.test('x${symbol_escape}${symbol_escape}!y', // negative thinspace
+        null,  'x',
+        'tag', '${symbol_escape}${symbol_escape}!',
+        null,  'y');
+
+      MT.test('J.${symbol_escape}${symbol_escape} L.${symbol_escape}${symbol_escape} is', // period not ending a sentence
+        null, 'J',
+        null, '.',
+        null, '${symbol_escape}${symbol_escape}',
+        null, ' L',
+        null, '.',
+        null, '${symbol_escape}${symbol_escape}',
+        null, ' is'); // maybe could be better
+
+      MT.test('X${symbol_escape}${symbol_escape}@. The', // period ending a sentence
+        null,  'X',
+        'tag', '${symbol_escape}${symbol_escape}@',
+        null,  '.',
+        null,  ' The');
+
+      MT.test('{${symbol_escape}${symbol_escape}em If${symbol_escape}${symbol_escape}/} I', // italic correction
+        'bracket', '{',
+        'tag',     '${symbol_escape}${symbol_escape}em',
+        null,      ' ',
+        null,      'If',
+        'tag',     '${symbol_escape}${symbol_escape}/',
+        'bracket', '}',
+        null,      ' ',
+        null,      'I');
+
+    </script>
+
+    <h2>New Commands</h2>
+
+    Should be able to define a new command that happens to be a method on Array
+    (e.g. <tt>pop</tt>):
+    <script language="javascript">
+      MT.test('${symbol_escape}${symbol_escape}newcommand{${symbol_escape}${symbol_escape}pop}',
+        'tag', '${symbol_escape}${symbol_escape}newcommand',
+        'bracket', '{',
+        'tag', '${symbol_escape}${symbol_escape}pop',
+        'bracket', '}');
+    </script>
+
+    <h2>Summary</h2>
+    <script language="javascript">
+      MT.printSummary();
+    </script>
+
+  </body>
+</html>
+

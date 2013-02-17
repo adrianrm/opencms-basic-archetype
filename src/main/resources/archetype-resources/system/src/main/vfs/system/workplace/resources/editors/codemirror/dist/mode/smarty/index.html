@@ -1,0 +1,86 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CodeMirror: Smarty mode</title>
+    <link rel="stylesheet" href="../../lib/codemirror.css">
+    <script src="../../lib/codemirror.js"></script>
+    <script src="smarty.js"></script>
+    <style type="text/css">.CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}</style>
+    <link rel="stylesheet" href="../../doc/docs.css">
+  </head>
+  <body>
+    <h1>CodeMirror: Smarty mode</h1>
+
+    <form><textarea id="code" name="code">
+{extends file="parent.tpl"}
+{include file="template.tpl"}
+
+{* some example Smarty content *}
+{if isset(${symbol_dollar}name) && ${symbol_dollar}name == 'Blog'}
+  This is a {${symbol_dollar}var}.
+  {${symbol_dollar}integer = 451}, {${symbol_dollar}array[] = "a"}, {${symbol_dollar}stringvar = "string"}
+  {assign var='bob' value=${symbol_dollar}var.prop}
+{elseif ${symbol_dollar}name == ${symbol_dollar}foo}
+  {function name=menu level=0}
+    {foreach ${symbol_dollar}data as ${symbol_dollar}entry}
+      {if is_array(${symbol_dollar}entry)}
+        - {${symbol_dollar}entry@key}
+        {menu data=${symbol_dollar}entry level=${symbol_dollar}level+1}
+      {else}
+        {${symbol_dollar}entry}
+      {/if}
+    {/foreach}
+  {/function}
+{/if}</textarea></form>
+
+    <script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        mode: "smarty"
+      });
+    </script>
+
+    <br />
+
+    <form><textarea id="code2" name="code2">
+{--extends file="parent.tpl"--}
+{--include file="template.tpl"--}
+
+{--* some example Smarty content *--}
+{--if isset(${symbol_dollar}name) && ${symbol_dollar}name == 'Blog'--}
+  This is a {--${symbol_dollar}var--}.
+  {--${symbol_dollar}integer = 451--}, {--${symbol_dollar}array[] = "a"--}, {--${symbol_dollar}stringvar = "string"--}
+  {--assign var='bob' value=${symbol_dollar}var.prop--}
+{--elseif ${symbol_dollar}name == ${symbol_dollar}foo--}
+  {--function name=menu level=0--}
+    {--foreach ${symbol_dollar}data as ${symbol_dollar}entry--}
+      {--if is_array(${symbol_dollar}entry)--}
+        - {--${symbol_dollar}entry@key--}
+        {--menu data=${symbol_dollar}entry level=${symbol_dollar}level+1--}
+      {--else--}
+        {--${symbol_dollar}entry--}
+      {--/if--}
+    {--/foreach--}
+  {--/function--}
+{--/if--}</textarea></form>
+
+    <script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("code2"), {
+        lineNumbers: true,
+        mode: {
+          name: "smarty",
+          leftDelimiter: "{--",
+          rightDelimiter: "--}"
+        }
+      });
+    </script>
+
+    <p>A plain text/Smarty mode which allows for custom delimiter tags (defaults to <b>{</b> and <b>}</b>).</p>
+
+    <p><strong>MIME types defined:</strong> <code>text/x-smarty</code></p>
+  </body>
+</html>

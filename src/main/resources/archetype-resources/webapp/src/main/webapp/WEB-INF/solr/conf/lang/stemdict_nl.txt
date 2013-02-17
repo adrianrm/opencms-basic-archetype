@@ -1,0 +1,9 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+${symbol_pound} Set of overrides for the dutch stemmer
+${symbol_pound} TODO: load this as a resource from the analyzer and sync it in build.xml
+fiets	fiets
+bromfiets	bromfiets
+ei	eier
+kind	kinder

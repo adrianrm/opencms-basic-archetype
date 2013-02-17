@@ -1,0 +1,130 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+${symbol_pound}
+${symbol_pound} This file defines a stopword set for Japanese.
+${symbol_pound}
+${symbol_pound} This set is made up of hand-picked frequent terms from segmented Japanese Wikipedia.
+${symbol_pound} Punctuation characters and frequent kanji have mostly been left out.  See LUCENE-3745
+${symbol_pound} for frequency lists, etc. that can be useful for making your own set (if desired)
+${symbol_pound}
+${symbol_pound} Note that there is an overlap between these stopwords and the terms stopped when used
+${symbol_pound} in combination with the JapanesePartOfSpeechStopFilter.  When editing this file, note
+${symbol_pound} that comments are not allowed on the same line as stopwords.
+${symbol_pound}
+${symbol_pound} Also note that stopping is done in a case-insensitive manner.  Change your StopFilter
+${symbol_pound} configuration if you need case-sensitive stopping.  Lastly, note that stopping is done
+${symbol_pound} using the same character width as the entries in this file.  Since this StopFilter is
+${symbol_pound} normally done after a CJKWidthFilter in your chain, you would usually want your romaji
+${symbol_pound} entries to be in half-width and your kana entries to be in full-width.
+${symbol_pound}
+の
+に
+は
+を
+た
+が
+で
+て
+と
+し
+れ
+さ
+ある
+いる
+も
+する
+から
+な
+こと
+として
+い
+や
+れる
+など
+なっ
+ない
+この
+ため
+その
+あっ
+よう
+また
+もの
+という
+あり
+まで
+られ
+なる
+へ
+か
+だ
+これ
+によって
+により
+おり
+より
+による
+ず
+なり
+られる
+において
+ば
+なかっ
+なく
+しかし
+について
+せ
+だっ
+その後
+できる
+それ
+う
+ので
+なお
+のみ
+でき
+き
+つ
+における
+および
+いう
+さらに
+でも
+ら
+たり
+その他
+に関する
+たち
+ます
+ん
+なら
+に対して
+特に
+せる
+及び
+これら
+とき
+では
+にて
+ほか
+ながら
+うち
+そして
+とともに
+ただし
+かつて
+それぞれ
+または
+お
+ほど
+ものの
+に対する
+ほとんど
+と共に
+といった
+です
+とも
+ところ
+ここ
+${symbol_pound}${symbol_pound}${symbol_pound}${symbol_pound}${symbol_pound} End of file

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd" name="opencms-8.5-basic"
+    xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <requiredProperties>
+    <requiredProperty key="name" />
+    <requiredProperty key="opencmsDbUser" >
+      <defaultValue>root</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="opencmsDbPassword" >
+      <defaultValue>root</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="opencmsDbName" >
+      <defaultValue>opencms</defaultValue>
+    </requiredProperty>
+  </requiredProperties>
+  <fileSets>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>parent</directory>
+      <includes>
+        <include>**/*.project</include>
+        <include>**/*.xml</include>
+        <include>**/*.txt</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>orgunits</directory>
+      <includes>
+        <include>**/*.project</include>
+        <include>**/*.xml</include>
+        <include>**/*.txt</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>content/src</directory>
+      <includes>
+        <include>**/*.xml</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>content</directory>
+      <includes>
+        <include>**/*.project</include>
+        <include>**/*.xml</include>
+        <include>**/*.txt</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>webapp/target</directory>
+      <includes>
+        <include>**/*.xml</include>
+        <include>**/*.properties</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>system</directory>
+      <includes>
+        <include>**/*.project</include>
+        <include>**/*.xml</include>
+        <include>**/*.txt</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>webapp/src</directory>
+      <includes>
+        <include>**/*.jsp</include>
+        <include>**/*.xml</include>
+        <include>**/*.properties</include>
+        <include>**/*.txt</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>.metadata/.plugins</directory>
+      <includes>
+        <include>**/*.xml</include>
+        <include>**/*.txt</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>webapp</directory>
+      <includes>
+        <include>**/*.project</include>
+        <include>**/*.xml</include>
+        <include>**/*.txt</include>
+        <include>**/*.classpath</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>orgunits/src</directory>
+      <includes>
+        <include>**/*.xml</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>system/src</directory>
+      <includes>
+        <include>**/*.jsp</include>
+        <include>**/*.html</include>
+        <include>**/*.xml</include>
+        <include>**/*.properties</include>
+        <include>**/*.txt</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>parent/src</directory>
+      <includes>
+        <include>**/*.xml</include>
+        <include>**/*.txt</include>
+      </includes>
+    </fileSet>
+    <fileSet encoding="UTF-8">
+      <directory>.metadata/.mylyn</directory>
+      <includes>
+        <include>**/*.zip</include>
+      </includes>
+    </fileSet>
+    <fileSet encoding="UTF-8">
+      <directory>webapp/src</directory>
+      <includes>
+        <include>**/*.jpg</include>
+        <include>**/*.MF</include>
+        <include>**/*.sql</include>
+        <include>**/*.wsdl</include>
+        <include>**/*.xsd</include>
+        <include>**/*.bat</include>
+        <include>**/*.sh</include>
+        <include>**/*.tld</include>
+        <include>**/*.gif</include>
+      </includes>
+    </fileSet>
+    <fileSet encoding="UTF-8">
+      <directory>system/src</directory>
+      <includes>
+        <include>**/*.</include>
+        <include>**/*.afp</include>
+        <include>**/*.woff</include>
+        <include>**/*.js</include>
+        <include>**/*.workplace/default_bodies/default</include>
+        <include>**/*.ico</include>
+        <include>**/*.help/jsptemplates/help</include>
+        <include>**/*.swf</include>
+        <include>**/*.eot</include>
+        <include>**/*.rpc</include>
+        <include>**/*.cgi</include>
+        <include>**/*.md</include>
+        <include>**/*.json</include>
+        <include>**/*.jar</include>
+        <include>**/*.php</include>
+        <include>**/*.config</include>
+        <include>**/*.dtd</include>
+        <include>**/*.htm</include>
+        <include>**/*.yml</include>
+        <include>**/*.db</include>
+        <include>**/*.svg</include>
+        <include>**/*.gz</include>
+        <include>**/*.ttf</include>
+        <include>**/*.htc</include>
+        <include>**/*.jpg</include>
+        <include>**/*.svgz</include>
+        <include>**/*.py</include>
+        <include>**/*.cfm</include>
+        <include>**/*.png</include>
+        <include>**/*.pl</include>
+        <include>**/*.xsd</include>
+        <include>**/*.lasso</include>
+        <include>**/*.ascx</include>
+        <include>**/*.asp</include>
+        <include>**/*.aspx</include>
+        <include>**/*.gif</include>
+        <include>**/*.css</include>
+        <include>**/*.cfc</include>
+      </includes>
+    </fileSet>
+    <fileSet encoding="UTF-8">
+      <directory>.metadata</directory>
+      <includes>
+        <include>**/*.ini</include>
+        <include>**/*.log</include>
+      </includes>
+    </fileSet>
+    <fileSet encoding="UTF-8">
+      <directory>parent/src</directory>
+      <includes>
+        <include>**/*.bat</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</archetype-descriptor>
