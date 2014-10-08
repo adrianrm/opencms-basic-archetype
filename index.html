@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Opencms-basic-archetype by adrianrm</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Opencms-basic-archetype</h1>
+        <p>Maven Archetype to create an OpenCms project managed with the comundus VFS-Maven-Plugin</p>
+
+        <p class="view"><a href="https://github.com/adrianrm/opencms-basic-archetype">View the Project on GitHub <small>adrianrm/opencms-basic-archetype</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/adrianrm/opencms-basic-archetype/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/adrianrm/opencms-basic-archetype/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/adrianrm/opencms-basic-archetype">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="opencms-basic-archetype" class="anchor" href="#opencms-basic-archetype"><span class="octicon octicon-link"></span></a>opencms-basic-archetype</h1>
+
+<p>Maven Archetype to create an OpenCms project managed with the comundus VFS-Maven-Plugin</p>
+
+<h2>
+<a name="quick-start" class="anchor" href="#quick-start"><span class="octicon octicon-link"></span></a>Quick start</h2>
+
+<h3>
+<a name="install-archetype-in-the-local-repository-or-deploy-it-to-a-repository" class="anchor" href="#install-archetype-in-the-local-repository-or-deploy-it-to-a-repository"><span class="octicon octicon-link"></span></a>Install Archetype in the local repository or deploy it to a repository</h3>
+
+<p><code>mvn install</code></p>
+
+<p><code>mvn deploy -Dserver</code></p>
+
+<h3>
+<a name="create-and-customize-project" class="anchor" href="#create-and-customize-project"><span class="octicon octicon-link"></span></a>Create and customize project</h3>
+
+<p><code>mvn archetype:generate</code></p>
+
+<pre><code>Define value for property 'groupId': : mygroup
+Define value for property 'artifactId': : sample-opencms
+Define value for property 'version':  1.0-SNAPSHOT: : 1.0
+Define value for property 'package':  mygroup: : mypackage
+Define value for property 'name': : Sample OpenCms
+Define value for property 'opencmsDbName':  opencms: : opencms85archetype
+Define value for property 'opencmsDbPassword':  root: : dbuser
+Define value for property 'opencmsDbUser':  root: : dbpassword
+</code></pre>
+
+<p>The generated project will use the database opencms85archetype, in a mysql server listening in the default port 3306. 
+To change this, the file <code>parent/pom.xml</code> has to be changed.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/adrianrm">adrianrm</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
